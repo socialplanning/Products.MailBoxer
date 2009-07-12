@@ -1,0 +1,60 @@
+ <p>
+ <small>
+ <dtml-in PARENTS reverse>
+ <dtml-if title>
+  / <a href="<dtml-var absolute_url>">
+     <dtml-var "_.test(hasProperty('mailSubject'), 
+                              getProperty('mailSubject'), title)" html_quote>
+    </a>
+ </dtml-if title>
+ </dtml-in PARENTS>
+ </small>
+ </p>
+
+<form action="<dtml-var URL>" method="get">
+ Search: <input name="query" width=30 value="<dtml-var query missing>">
+ <input type="submit" value=" Search ">
+</form>
+
+<dtml-if query>
+
+ <dtml-in "searchMailBoxerArchive(query)" size=10 start=query_start>
+ 
+  <dtml-if sequence-start>
+   <dtml-if previous-sequence-start-number>
+    <a href="<dtml-var URL><dtml-var sequence-query>query_start=<dtml-var
+         previous-sequence-start-number>"><b>[&lt;&lt;&lt; ]</b></a>
+   </dtml-if previous-sequence-start-number>
+
+   &nbsp;<b><dtml-var sequence-length> hits</b>&nbsp;
+
+   <dtml-if next-sequence-start-number>
+    <a href="<dtml-var URL><dtml-var sequence-query>query_start=<dtml-var
+        next-sequence-start-number>"><b>[ &gt;&gt;&gt;]</b></a>
+   </dtml-if next-sequence-start-number>
+   
+   <table width="100%" cellspacing="0" cellpadding="4">
+   <tr>
+    <th>Nr.</th><th>Date</th><th>Subject</th><th>From</th>
+   </tr>
+  </dtml-if sequence-start>
+
+ <dtml-if sequence-even><tr bgcolor="#e0e0e0"><dtml-else><tr></dtml-if>
+
+  <td><dtml-var sequence-number></td>
+  <td><dtml-var "mailDate.ISO()"></td>
+  <td><a href="<dtml-var absolute_url>#<dtml-var getId>">
+         <b><dtml-var mailSubject null="No subject" html_quote></b>
+        </a>
+        <br>
+        <small><dtml-var "at(mailBody[:200])" html_quote></small></td>
+  <td><dtml-var "at(mailFrom)" html_quote></td>
+  </tr>
+
+ <dtml-if sequence-end></table></dtml-if>
+
+ <dtml-else>
+   There was no data matching this query.
+ </dtml-in>
+
+</dtml-if query>

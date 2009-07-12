@@ -1,0 +1,196 @@
+Upgrading from MailBoxer 3.3 to 3.3.1
+
+ NICE TO HAVE:
+ 
+  - Update your mail_approve-template with getPlainBodyFromMail()
+    to make the approval-experience a little bit less "geeky"
+    for your average list-moderator.
+    
+    
+Upgrading from MailBoxer 3.2 to 3.3
+
+ RECOMMENDED:
+
+  - If you want a customizable view for moderation requests,
+    please create a mail_approve-template. Use the default
+    template as starting point.
+
+  - Install MaildropHost (http://www.dataflake.org/software/maildrophost)
+    and (re)create all MailHosts used by your MailBoxers with a new MaildropHost
+    to get rid of occasionally doubled mails due to read-/write-conflicts
+    in ZODB.
+
+ NICE TO HAVE:
+
+  - If you want new unique-Message-Ids in your outgoing mails,
+    update your mail_header-template with the following header:
+
+    Message-id: <dtml-var "uniqueMessageId()">
+
+
+Upgrading from MailBoxer 3.1 to 3.2
+
+ Nothing to do...
+
+
+Upgrading from MailBoxer 3.0 to 3.1
+
+ MUST: Update your mail_moderator-template if you run
+ moderated lists.
+
+ RECOMMENDED: Remove mail_handler-template if you
+ don't use a customized version.
+
+ AS YOU LIKE: You can update index_html / mail_search,
+ mostly useful if you want to use ZPT as wrapper.
+
+
+Upgrading from MailBoxer 2.3.0 to MailBoxer 3.0
+
+ Please note: mail_in_members / mail_out_members
+ were removed!!! Please use the getter-method
+ to include dynamic email-lists.
+
+ Copy the new lock-aware smtp2zope.py to your
+ mail-server to have a much improved handling of
+ errors. Set USE_LOCKS=0 if you encounter problems
+ with locking.
+
+ Upgrading all templates is recommended, because
+ there may be SERIOUS (!!) problems with creating
+ infinite loops in the old templates!!!
+
+ If you want to make use of the new features, you
+ should upgrade your templates at least to the new
+ getValueFor-syntax.
+
+ You should upgrade the mail_handler-template if you
+ want to get a correct sender-limit-counter. Please
+ replace 'manage_listboxer(...)' with 'listMail(...)'
+ or simply create & copy a new template.
+
+ Please note: MailBoxer sets senderlimit/senderinterval
+ to reasonable defaults when you upgrade. If you use
+ MailBoxer for non-mailing-list-based applications you
+ should change the defaults (set to 0 to disable
+ loop-detection at all).
+
+
+Upgrading from MailBoxer 2.2.6 to MailBoxer 2.3.0
+
+ If you're happy with MailBoxer, you don't need to do
+ anything. Restart your server and that's it...:)
+
+ If not, read the CHANGES.txt for new features you might
+ want to use.
+
+ If you want to make the hashkey persistent, you
+ should save the property-tab of your MailBoxers.
+
+
+Upgrading from MailBoxer 2.2.5 to MailBoxer 2.2.6
+
+ PLEASE UPGRADE your mail_moderator-methods to fix
+ a critical bug (mailloop)!!!
+
+
+Upgrading from MailBoxer 2.2.4 to MailBoxer 2.2.5
+
+ Nothing to be done in general...:)
+
+ Maybe you should check the mail-(un)subscribe-templates
+ if you experience problems with clients redirecting the
+ mails to the wrong address.
+
+
+Upgrading from MailBoxer 2.2.3 to MailBoxer 2.2.4
+
+ Copy the new smtp2zope.py to your mailserver if you
+ want better exit-codes and error-handling.
+
+
+Upgrading from MailBoxer 2.2.2 to MailBoxer 2.2.3
+
+ If you want to use the new textwrap-modul have a look at
+ the new mail_template.
+
+
+Upgrading from MailBoxer 2.2.x to MailBoxer 2.2.2
+
+ Please change your mail_reply-method to be kind to your
+ customers.
+
+
+Upgrading from MailBoxer 2.1.x to MailBoxer 2.2.1
+
+ Requirements
+
+  MailBoxer requires now the
+  "email-package for python":http://sourceforge.net/projects/mimelib.
+  Download and install it (maybe as root) with the same python-binary
+  you use for running your Zope-Server. If you run Zope 2.7 with Python
+  2.2, the email-package is already delivered with Python 2.2.
+
+ Simply untar the Product and restart ZOPE.
+
+ Check your mail_header and change/add the line::
+
+  Content-type: <dtml-var "mail.get('content-type','text/plain')">
+
+ Have a look at the new sniplist-definitions...
+
+
+
+Upgrading from MailBoxer 2.0 to MailBoxer 2.1.x
+
+ MailBoxer 2.1 introduces a verification-request for (un)subscriptions.
+ Therefore the DTML for "mail_subscribe" & "mail_unsubscribe" needed
+ to be changed. Please modify all your existing
+ "mail_(un)subscribe"-methods according to the 2.1-release.
+ Have a look at MailBoxerTemplates.py or simply add a "dummy" MailBoxer
+ after installing 2.1 and copy "mail_subscribe" & "mail_unsubscribe"
+ to your existing instances.
+
+ A nice-to-have is to have a look at the changed mail_moderator-method.
+
+ The handling of the regular expressions for "subscribe" & "unsubscribe"
+ has changed. Please remove the "|.*: subscribe" from old MailBoxer's
+ "subscribe"-properties.
+
+ Please install the slightly modified 'smtp2zope.py' on your mail-server.
+
+
+
+Upgrading from MailBoxer 1.x to MailBoxer 2.x
+
+  !!! PLEASE READ WITH CARE BEFORE YOU INSTALL THE CURRENT RELEASE !!!
+
+  Please test all steps on a non-production-system first!!!
+
+   - Copy the new smtp2zope.py to your mail-server.
+
+   - Copy your maillists with cut-and-paste to an external text-editor (or
+     simply a DTML Document not located in a MailBoxer-Folder) so you can
+     restore them after updating.
+
+   - Copy your archived mails out of the MailBoxer-Folder to a work-folder
+     with id = 'archiveOld' so you can restore them after updating.
+
+   - Delete your existing MailBoxer-Folders.
+
+   - Install the new MailBoxer-Product.
+
+   - Create new MailBoxers
+
+   - Copy your maillists back to the MailBoxer
+
+   - Copy your folder with id = 'archiveOld' to the new
+     MailBoxer-Folder.
+
+   - Run the ConvertArchive.py over your archive. Simply upload
+     ConvertArchive.py out of lib/python/Products/MailBoxer to a PythonScript
+     and 'Test' it...
+
+   - Modify mail_header, mail_footer etc. to meet your needs.
+
+   - Yes, I know... that's no fun, but that's all...

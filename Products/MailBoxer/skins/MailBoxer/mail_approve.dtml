@@ -1,0 +1,53 @@
+<dtml-comment>
+ This view is called when a moderation request for a queued mail arrives.
+</dtml-comment>
+
+<dtml-var standard_html_header>
+
+<h1><dtml-var "getValueFor('title')"> (<dtml-var "getValueFor('mailto')">)</h1>
+
+<dtml-if "msg!='INVALID_REQUEST'">
+ <dtml-in "restrictedTraverse(getValueFor('mailqueue')).objectValues()">
+  <dtml-if sequence-start>
+   <h3>Pending requests</h3>
+   <ul>
+  </dtml-if>
+  <li>
+   <a href="<dtml-var "absolute_url()">"><dtml-var title></a>
+   <dtml-in "['approve','discard']">
+    [<a href="<dtml-var URL>?action=<dtml-var sequence-item>&mid=<dtml-var getId>&pin=<dtml-var "pin(getValueFor('mailto'))">"><dtml-var sequence-item></a>]
+   </dtml-in>
+  </li>
+  <dtml-if sequence-end>
+   </ul>
+  </dtml-if>
+ <dtml-else>
+  <h3>No pending requests</h3>
+ </dtml-in>
+<dtml-else>
+ <h2>Invalid Request!</h2>
+ <p>The url you submitted could not be resolved! Please check if it wasn't truncated.</p>
+</dtml-if>
+
+<dtml-if "msg=='MAIL_NOT_FOUND'">
+ <h2>Mail not found!</h2>
+ <p>Maybe the message was already processed by another moderator.</p>
+</dtml-if>
+
+<dtml-if "msg=='MAIL_APPROVE'">
+ <h2>Mail approved!</h2>
+ <p>The following mail was sent to the list:</p>
+ <hr />
+ <pre><dtml-var "getPlainBodyFromMail(getMailFromRequest(REQUEST))[1]" html_quote></pre>
+ <hr />
+</dtml-if>
+
+<dtml-if "msg=='MAIL_DISCARD'">
+ <h2>Mail discarded!</h2>
+ <p>The following mail was deleted from queue:</p>
+ <hr />
+ <pre><dtml-var "getPlainBodyFromMail(getMailFromRequest(REQUEST))[1]" html_quote></pre>
+ <hr />
+</dtml-if>
+
+<dtml-var standard_html_footer>

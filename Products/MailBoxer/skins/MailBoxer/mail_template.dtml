@@ -1,0 +1,57 @@
+<dtml-comment> This is the template for rendering an archived mail </dtml-comment>
+
+<a name="<dtml-var getId>">
+
+ <table width="100%" bgcolor="#e0e0e0">
+ <tr>
+  <td valign="top" width="60%"><b><dtml-var mailSubject html_quote></b>
+     <br><dtml-var "at(mailFrom)" html_quote></td>
+  <td valign="top" width="20%"><b><dtml-var "mailDate.ISO()"></b></td>
+  <td valign="top" width="20%" align="right">
+
+   <dtml-if fullMode>
+   [ <a href="<dtml-var URL>#<dtml-var getId>">SNIP</a> ]
+  <dtml-else>
+   [ <a href="<dtml-var URL>?fullMode=1#<dtml-var getId>">FULL</a> ]
+  </dtml-if> 
+  </td> 
+ </tr>
+ </table>
+
+</a>
+
+ <table width="100%">
+ <tr>
+  <td>
+   <dtml-if fullMode>
+    <pre><dtml-var "textwrap(at(mailBody),79)" html_quote></pre>
+   <dtml-else>
+    <pre><dtml-var "textwrap(snipMail(at(mailBody)),79)"></pre>
+   </dtml-if>
+  </td>
+ </tr>
+
+ <dtml-let attachments="objectValues('File')">
+ <dtml-if attachments>
+  <tr>
+   <td>
+   <table>
+    <tr>
+      <td><b>Attachments:</b></td><td>&nbsp;</td><td>&nbsp;</td>
+    </tr>
+    
+    <dtml-in attachments>
+     <tr>
+      <td><a href="<dtml-var absolute_url>/download"><dtml-var title_or_id></a></td>
+      <td><dtml-var content_type missing="application/x-unknown-content-type"></td>
+      <td><dtml-var size missing="?"> Bytes</td>
+     </tr>
+    </dtml-in>
+   </table>
+   </td>
+  </tr>
+ </dtml-if>
+ </dtml-let>
+ </table>
+
+<hr noshade>

@@ -1,0 +1,4 @@
+Content-Type: <dtml-var content_type missing="application/x-unknown-content-type">
+Content-Disposition: Attachment; Filename=<dtml-var title_or_id>
+
+<dtml-var this>

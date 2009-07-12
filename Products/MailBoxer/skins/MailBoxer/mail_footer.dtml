@@ -1,0 +1,8 @@
+<dtml-comment>
+ Footer for plain-text-mails which will be added to the bulked mails.
+ Remove dtml-comment in last line to show a link to archived mail.
+</dtml-comment>
+-- 
+To unsubscribe send an email with subject <dtml-var "getValueFor('unsubscribe')"> to <dtml-var "getValueFor('mailto')">.
+Please contact <dtml-var "getValueFor('moderator')[0]"> for questions.
+<dtml-comment><dtml-var absolute_url></dtml-comment>

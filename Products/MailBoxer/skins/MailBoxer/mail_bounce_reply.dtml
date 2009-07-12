@@ -1,0 +1,32 @@
+<dtml-comment>
+ This script sends an 'error' reply to the sender.
+</dtml-comment>
+
+<dtml-sendmail mailhost="MailHost">
+To: <dtml-var address>
+From: <dtml-var "getValueFor('moderator')[0]">
+X-Mailer: <dtml-var "getValueFor('xmailer')">
+Subject: [<dtml-var "getValueFor('title')">] Mail unprocessed
+
+Your email with the subject
+
+ <dtml-var subject>
+
+could not be processed for the address
+
+ <dtml-var address>
+
+for the mailinglist
+
+ <dtml-var "getValueFor('title')">.
+
+Possible reason:
+
+<dtml-if "address in lowerList(getValueFor('maillist'))">
+ - You tried to subscribe with a already subscribed address.
+<dtml-else>
+ - You are not subscribed to this list with the above address.
+</dtml-if>
+
+Yours, <dtml-var "getValueFor('moderator')[0]">
+</dtml-sendmail>

@@ -1,0 +1,96 @@
+<dtml-var manage_page_header>
+<dtml-with "_(management_view='Bounce')">
+<dtml-var manage_tabs>
+</dtml-with>
+
+<script type="text/javascript">
+<!-- 
+
+isSelected = false;
+
+function toggleSelect() {
+  if (isSelected == false) {
+    for (i = 0; i < document.objectItems.length; i++)
+      document.objectItems.elements[i].checked = true ;
+      isSelected = true;
+      document.objectItems.selectButton.value = "Deselect All";
+      return isSelected;
+  }
+  else {
+    for (i = 0; i < document.objectItems.length; i++)
+      document.objectItems.elements[i].checked = false ;
+      isSelected = false;
+      document.objectItems.selectButton.value = "Select All";
+      return isSelected;       
+  }
+}
+
+//-->
+</script>
+
+<dtml-if Principia-Version>
+<p>
+<em>You are currently working in version <dtml-var Principia-Version></em>
+</p>
+</dtml-if Principia-Version>
+
+<p class="list-item">
+
+Here you can see and manage bounced addresses.
+
+Removing an address from the bouncelist is useful, if you don't want
+to monitor it anymore because it seems to stop bouncing.
+
+Deleting an address from the maillist means, that this address will
+not receive any mail until it is subscribed again.
+
+</p>
+
+<dtml-in "bounces.keys()" sort=sequence-item>
+<dtml-if sequence-start>
+<form action="<dtml-var URL1>" name="objectItems">
+
+<table width="100%" cellspacing="0" cellpadding="2">
+<tr class="list-header">
+<td class="list-item">&nbsp;</td>
+<td class="list-item"><b>Bounced Address</b></td>
+<td class="list-item"><b>Number of Bounces</b></td>
+<td class="list-item"><b>First Bounce</b></td>
+<td class="list-item"><b>Last Bounce</b></td>
+</tr>
+</dtml-if>
+<tr <dtml-if sequence-even>class="row-hilite"</dtml-if>>
+<td class="list-item"><input type="checkbox" name="ids:list" value="<dtml-var
+sequence-item>"></td>
+
+<td class="list-item"><dtml-var sequence-item></td>
+<td class="list-item"><dtml-var "bounces[_['sequence-item']][0]"></td>
+<td class="list-item"><dtml-var "bounces[_['sequence-item']][1].ISO()"></td>
+<td class="list-item"><dtml-var "bounces[_['sequence-item']][2].ISO()"></td>
+</tr>
+
+<dtml-if sequence-end>
+</table>
+<p class="list-item">
+<input class="form-element" type="submit" name="manage_resetBounces:action" value="Remove from Bouncelist"> 
+<input class="form-element" type="submit" name="manage_deleteBounces:action" value="Delete from Maillist" style="background-color:#FF0000;">
+
+<script type="text/javascript">
+<!-- 
+if (document.forms[0]) {
+  document.write('<input class="form-element" type="submit" name="selectButton" ' +
+                 'value="Select All" onClick="toggleSelect();' + 
+                 'return false">')
+  }
+//-->
+</script>
+</p>
+
+</form>
+</dtml-if>
+
+<dtml-else>
+<p class="list-item">No bounced mails.</p>
+</dtml-in>
+
+<dtml-var manage_page_footer>

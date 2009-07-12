@@ -1,0 +1,21 @@
+<dtml-sendmail mailhost="MailHost">
+To: <dtml-var subscriber_address>
+From: <dtml-var "getValueFor('mailto')">
+X-Mailer: <dtml-var "getValueFor('xmailer')">
+Subject: Welcome to [<dtml-var "getValueFor('title')">]
+
+Hello <dtml-var subscriber_name>,
+
+you are now subscribed to <dtml-var "getValueFor('title')">.
+
+Send your mails to: <dtml-var "getValueFor('mailto')">
+
+If you want to unsubscribe from <dtml-var "getValueFor('title')">,
+send a mail with subject (not body!):
+
+<dtml-var "getValueFor('unsubscribe')"> 
+
+to: <dtml-var "getValueFor('mailto')">
+
+Yours, <dtml-var "getValueFor('moderator')[0]">
+</dtml-sendmail>

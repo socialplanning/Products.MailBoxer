@@ -1,0 +1,93 @@
+Changes
+
+ unreleased
+ 
+     - added support for Christian Heimes SecureMailHost
+       (http://sf.net/projects/collective/) as alternative to MaildropHost.
+       Thanks to Uli Fouquet for initial patch!!!
+       
+     - Replaced private _unpackMultifile with public unpackMail. Moved
+       attachment-archiving from _unpackMultifile to manage_addMail.
+       
+     - Refactored all generic mail-parsing-tools to MailBoxerTools.py;
+       unified import for MailBoxerTemplates according to other
+       MailBoxer*-imports.
+       
+     - Richard Waid <richard@iopen.net>: Added a new hook to look for the
+       property 'mailinlist' before looking for 'maillist' to allow lists
+       with a limited set of users allowed to post but distinct from the
+       group moderators.
+     
+     - Richard Waid <richard@iopen.net>: Added attachment stripping to
+       smtp2zope.py.
+     
+     - Richard Waid <richard@iopen.net>: Added an event handling mechanism
+       to allow Zope-side MailBoxer to send notifications when events such
+       as attachment stripping occur.
+
+     - Richard Waid <richard@iopen.net>: Enabled anonymous access to
+       the MailBoxer subversion repository at
+       https://svn.iopen.net/opensource/mailboxer     
+     
+ Version 3.3.1
+ 
+     - added wrapper for rfc822.AddressList() as parseaddrList. I needed
+       a address-list parser for dynamic mailinglists depending on the
+       TO-or-CC. Maybe someone will need this too.
+       
+     - added method for getting plain body from a mail (getPlainBodyFromMail)
+       to make the moderator-approval view a little bit more intuitive for the
+       average user (dugh, mail sources are ugly for joe user).
+       
+     - fixed bug: added missing html_quote for mail to mail_approval.
+     
+     
+ Version 3.3:
+
+     - added support for Jens Vagelpohls MaildropHost
+       (http://www.dataflake.org/software/maildrophost),
+       so MailBoxer works transactional (no more doubled mails due to
+       read-/write-zodb-conflicts). Using MaildropHost is the RECOMMENDED
+       setup for MailBoxer from now on!!!
+       Thanks to Jens for a really great product, which should be the
+       default MailHost-Product in Zope!
+
+     - added a customizable view (mail_approve) with pending requests
+       for moderation. Please use this template instead of the
+       old plain-text messages.
+       If no template is found, MailBoxer falls back to the old plain-texts.
+       I'll drop this fall-back behaviour in one of the next releases.
+
+     - added a unique id for queued messages, so a accidentially page-reload
+       won't approve / discard a newly arrived mail.
+
+     - added a unique message-id for each mail which is bulked to the list,
+       so problems under some setups with cross-posts to several lists
+       should be gone. Thanks to Christian Theune and his inital
+       "5-minute-hacked-patch", which needed some improvements.
+       Hope you like it this way, Christian...;)
+
+     - fixed bug: if the url given to the smtp2zope.py is not found (404)
+       (maybe some typo in the alias-file), the mail is bounced with
+       "user-doesn't-exist" and not(!) queued by the MTA anymore for
+       a next retry. Thanks to Christian Theune for patch!
+
+     - fixed bug: the mail-bulk-code was protected with a "historical"
+       try-except, which could result in loss of emails when something
+       went wrong while talking to the smtp-server.
+
+     - fixed bug: the smtp-connection is now closed / reopened after each
+       batch, so MTAs which only accept a limited number of mails per connection
+       won't defer your mails anymore.
+
+     - fixed bug: under some wired circumstances the Mail in the REQUEST
+       wasn't marshalled as string by Zope, so string-operations were broken
+       on the mail-data. Added a getMailFromRequest()-method which does
+       the string-conversion, so we always have a string.
+       Thanks to Dirk Datzert for tracking this down!
+
+     - fixed bug: searchMailBoxerArchive() used unrestrictedTraverse for
+       traversing the Catalog. Changed to restrictedTraverse.
+
+     - some minor refactorings & code-cleanups.
+

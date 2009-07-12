@@ -1,0 +1,21 @@
+<dtml-comment> 
+ This scripts handles the subscribe-request.
+</dtml-comment>
+
+<dtml-sendmail mailhost="MailHost">
+To: <dtml-var subscriber_address>
+From: <dtml-var "getValueFor('mailto')">
+X-Mailer: <dtml-var "getValueFor('xmailer')">
+Subject: <dtml-var "getValueFor('subscribe')"> [<dtml-var pinvalue>]
+
+Hello <dtml-var subscriber_name>,
+
+We have received a subscription request for your email address to the
+<dtml-var "getValueFor('title')"> mailing list. To confirm the request,
+simply reply to this message, leaving the subject line unchanged.
+
+If you do not wish to subscribe to this list, please disregard this
+message.  Send questions to <dtml-var "getValueFor('moderator')[0]">. 
+
+Yours, <dtml-var "getValueFor('moderator')[0]">
+</dtml-sendmail>

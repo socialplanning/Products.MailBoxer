@@ -1,0 +1,23 @@
+<dtml-comment>
+ This scripts handles unsubscribe-requests.
+</dtml-comment>
+
+<dtml-sendmail mailhost="MailHost">
+To: <dtml-var subscriber_address>
+From: <dtml-var "getValueFor('mailto')">
+X-Mailer: <dtml-var "getValueFor('xmailer')">
+Subject: <dtml-var "getValueFor('unsubscribe')"> [<dtml-var pinvalue>]
+
+Hello <dtml-var subscriber_name>,
+
+we have received a request to unsubscribe your email address from the
+<dtml-var "getValueFor('title')"> mailing list.
+
+To confirm the request, simply reply to
+this message, leaving the subject line unchanged.
+
+If you do not wish to cancel your subscription, please disregard this
+message.  Send questions to <dtml-var "getValueFor('moderator')[0]">.
+
+Yours, <dtml-var "getValueFor('moderator')[0]">
+</dtml-sendmail>

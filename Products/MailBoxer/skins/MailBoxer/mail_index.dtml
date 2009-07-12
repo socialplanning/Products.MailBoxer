@@ -1,0 +1,170 @@
+<dtml-if "this().aq_parent.hasProperty('mailDate')">
+ <dtml-return "RESPONSE.redirect(this().aq_parent.absolute_url())">
+</dtml-if>
+ 
+<table width="100%" cellspacing="0" cellpadding="4">
+<tr>
+<td valign="top">
+
+ <p>
+ <small>
+ <dtml-in PARENTS reverse>
+ <dtml-if title>
+  / <a href="<dtml-var absolute_url>">
+     <dtml-var "_.test(hasProperty('mailSubject'), 
+                              getProperty('mailSubject'), title)" html_quote>
+    </a>
+ </dtml-if title>
+ </dtml-in PARENTS>
+ </small>
+ </p>
+
+ <dtml-let previousObject="previousObject(this())"
+              nextObject="nextObject(this())">
+
+ <form action="<dtml-var URL>">
+  <dtml-if previousObject>
+   [ <a href="<dtml-var "previousObject.absolute_url()">">&lt;&lt;</a> ]
+  </dtml-if>
+
+  <dtml-if nextObject>
+   [ <a href="<dtml-var "nextObject.absolute_url()">">&gt;&gt;</a> ]
+  </dtml-if>
+
+  <input type="text" name="query"> <input type="submit" value=" Search ">
+ </form>
+ 
+ <p>
+ <small>
+  <dtml-if previousObject>
+   [ <a href="<dtml-var "previousObject.absolute_url()">">
+     <dtml-var "at(previousObject.title)" html_quote size=50></a> ]
+  </dtml-if>
+
+  <dtml-if nextObject>
+   [ <a href="<dtml-var "nextObject.absolute_url()">">
+     <dtml-var "at(nextObject.title)" html_quote size=50></a> ]
+  </dtml-if>
+ </small>
+ </p>
+
+ </dtml-let>
+
+ <dtml-if mailDate>
+
+  <dtml-var mail_template>
+  <dtml-in "archiveFolders(this())" sort=id>
+   <dtml-var mail_template>
+  </dtml-in>
+
+ <dtml-else>
+
+  <dtml-in "archiveFolders(this())" sort=id reverse>
+
+   <dtml-if sequence-start><ul></dtml-if>
+
+   <li>
+    <dtml-if mailDate>
+     <b>
+         <dtml-var "mailDate.ISO()">
+         <a href="<dtml-var absolute_url>#<dtml-var getId>">
+          <dtml-var mailSubject html_quote null="No subject">
+         </a>
+
+         <dtml-if "not aq_parent.hasProperty('mailDate')"> 
+          / <dtml-var "at(mailFrom)" html_quote>
+         </dtml-if>
+     </b>
+
+     <br>
+     <small><dtml-var "at(mailBody[:200])" html_quote>...</small>
+     <br>
+     <br>
+
+     <dtml-else>
+       <b><a href="&dtml-absolute_url;"><dtml-var "at(title)" html_quote></a></b>
+    </dtml-if mailDate>
+   </li>
+
+    <dtml-in "archiveFolders(_['sequence-item'])" sort=id reverse>
+
+     <dtml-if sequence-start><ul></dtml-if>
+
+     <li>
+     <dtml-if mailDate>
+        <dtml-if "not aq_parent.hasProperty('mailDate')">
+         <dtml-var "mailDate.Date()">
+        <dtml-else>
+         <dtml-var "mailDate.ISO()">
+        </dtml-if> 
+        
+        <a href="<dtml-var absolute_url>#<dtml-var getId>">
+         <dtml-if "aq_parent.hasProperty('mailDate')">
+           <dtml-var "at(mailFrom)" html_quote null="No sender">
+         <dtml-else>
+           <dtml-var mailSubject html_quote null="No subject">
+         </dtml-if>
+        </a>
+        
+        <dtml-let follow="_.len(archiveFolders(_['sequence-item']))">
+         <dtml-if follow> [<dtml-var follow>]</dtml-if>
+        </dtml-let>
+ 
+     <dtml-else>
+       <a href="&dtml-absolute_url;"><dtml-var "at(title)" html_quote></a>
+     </dtml-if mailDate>
+
+    </li>
+    <dtml-if sequence-end></ul><br></dtml-if>
+   </dtml-in>
+
+   <dtml-if sequence-end></ul><br></dtml-if>
+
+   </dtml-in>
+
+</dtml-if>
+</td>
+
+ <dtml-if "meta_type=='Mail Boxer'">
+  <td valign="top">
+
+  <h3>Recent Posts</h3>
+
+   <dtml-let mbCatalog="restrictedTraverse(getValueFor('catalog'))">
+
+    <dtml-in "mbCatalog.searchResults(mailDate={'query':_.DateTime()-7,'range':'min'},
+                                                 sort_on='mailDate')" size=10 reverse>
+
+    <dtml-if sequence-start><ul></dtml-if sequence-start>
+
+    <dtml-with "mbCatalog.getobject(data_record_id_)">
+
+      <li>
+       <b><dtml-var "mailDate.ISO()"></b>
+       <a href="<dtml-var absolute_url>#<dtml-var getId>">
+        <b><dtml-var mailSubject null="No subject" html_quote></b>
+       </a>
+        / <dtml-var "at(mailFrom)" html_quote>
+       <br />
+       <small><dtml-var "at(mailBody[:200])" html_quote></small>
+       <br />
+       <br />
+      </li>
+     </dtml-with>
+
+     <dtml-if sequence-end></ul></dtml-if>
+
+     <dtml-else>
+        Sorry, but there are no recent posts...
+  </dtml-in>
+  </dtml-let>
+
+  </td>
+ </dtml-if>
+
+</tr>
+</table>
+
+<a href="http://www.zope.org/Members/mjablonski/MailBoxer/">
+ <img src="/misc_/MailBoxer/mailboxer.png" border="0" alt="MailBoxer" title="MailBoxer" align="right">
+</a>

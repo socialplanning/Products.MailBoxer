@@ -1,0 +1,12 @@
+<dtml-sendmail mailhost="MailHost">
+To: <dtml-var subscriber_address>
+From: <dtml-var "getValueFor('mailto')">
+X-Mailer: <dtml-var "getValueFor('xmailer')">
+Subject: Unsubscribed from [<dtml-var "getValueFor('title')">]
+
+You have been unsubscribed from <dtml-var "getValueFor('title')">.
+
+Farewell!
+
+Yours, <dtml-var "getValueFor('moderator')[0]">
+</dtml-sendmail>

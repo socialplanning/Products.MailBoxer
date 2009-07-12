@@ -1,0 +1,48 @@
+<dtml-comment>
+ This script sends a moderation-request to the moderators
+ and a notification to the sender.
+</dtml-comment>
+
+<dtml-let boundary="'Boundary-%s-%s' % (ZopeTime().millis(), _.random.random())">
+<dtml-sendmail mailhost="MailHost">
+To: <dtml-var "','.join(getValueFor('moderator'))">
+Subject: [<dtml-var "getValueFor('title')"> - MODERATE] <dtml-var "mail.get('subject','No subject')">
+From: <dtml-var "mail.get('from')">
+X-Mailer: <dtml-var "getValueFor('xmailer')">
+Mime-Version: 1.0
+Content-Type: multipart/mixed; boundary="<dtml-var boundary>"
+
+--<dtml-var boundary>
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+
+We have received a moderation request for the mailinglist <dtml-var "getValueFor('title')">.
+
+If you want to approve the attached mail, please visit the following url:
+
+<dtml-var absolute_url>/manage_moderateMail?action=approve&mid=<dtml-var mid>&pin=<dtml-var "pin(getValueFor('mailto'))">
+
+If you want to discard the attached mail, please visit the following url:
+
+<dtml-var absolute_url>/manage_moderateMail?action=discard&mid=<dtml-var mid>&pin=<dtml-var "pin(getValueFor('mailto'))">
+
+--<dtml-var boundary>
+Content-Type: message/rfc822; name="forwarded message"
+Content-Description: <dtml-var "mail.get('from')">: <dtml-var "mail.get('subject')">
+
+<dtml-var "getMailFromRequest(REQUEST)">
+--<dtml-var boundary>--
+</dtml-sendmail>
+</dtml-let>
+
+<dtml-sendmail mailhost="MailHost">
+To: <dtml-var "mail.get('from')">
+From: <dtml-var "getValueFor('moderator')[0]">
+Subject: [RECEIVED] <dtml-var "mail.get('subject', 'No subject')">
+X-Mailer: <dtml-var "getValueFor('xmailer')">
+
+Your mail has been received, and is awaiting approval by a moderator.
+Once approved, it will show up on the list.
+
+Yours, <dtml-var "getValueFor('moderator')[0]">
+</dtml-sendmail>

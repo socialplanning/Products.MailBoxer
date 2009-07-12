@@ -1,0 +1,16 @@
+<dtml-comment>
+ Additional headers for mailinglists which will be added to the bulked
+ mails. Don't delete the X-Mailer. It's important to avoid endless mail-loops.
+</dtml-comment>
+
+Content-type: <dtml-var "mail.get('content-type','text/plain')">
+Subject: <dtml-if "mime_decode_header(mail.get('subject','')).find('[%s]' % getValueFor('title'))==-1">[<dtml-var "getValueFor('title')">] </dtml-if><dtml-var "mail.get('subject','No Subject')">
+Message-id: <dtml-var "uniqueMessageId()">
+X-Mailer: <dtml-var "getValueFor('xmailer')">
+Reply-To: <dtml-var "getValueFor('mailto')">
+Errors-To: <dtml-var "getValueFor('returnpath')">
+List-Post: <mailto:<dtml-var "getValueFor('mailto')">>
+List-Subscribe: <mailto:<dtml-var "getValueFor('mailto')">?subject=<dtml-var "getValueFor('subscribe')">>
+List-Unsubscribe: <mailto:<dtml-var "getValueFor('mailto')">?subject=<dtml-var "getValueFor('unsubscribe')">>
+List-Id: <dtml-var "getValueFor('title')">
+Precedence: Bulk

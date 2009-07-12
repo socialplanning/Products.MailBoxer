@@ -1,0 +1,85 @@
+<dtml-var manage_page_header>
+<dtml-var "manage_form_title(this(),_,form_title='Add MailBoxer')">
+
+<p class="form-help">A MailBoxer is a folderish object to manage and archive
+mailinglists. <b>Note:</b> You have to set up an alias in /etc/aliases of your
+mailserver to use this service. You can change the configuration of your
+MailBoxer after creation on the Property-Tab of the MailBoxer-Folder.</p>
+
+<form action="manage_addMailBoxer" method="post">
+<table cellspacing="0" cellpadding="2" border="0">
+
+<tr>
+<td align="left" valign="top" class="form-label">Id</td>
+<td align="left" valign="top" class="form-help">
+<input type="text" name="id:string" size="40" />
+<br>Fill in an unique id for your list (required).</td>
+</tr>
+
+<tr>
+<td align="left" valign="top" class="form-label">Title</td>
+<td align="left" valign="top" class="form-help">
+<input type="text" name="title:string" size="40" />
+<br>Fill in the title of your list (required).</td>
+</tr>
+
+<tr>
+<td align="left" valign="top" class="form-label">Email</td>
+<td align="left" valign="top" class="form-help">
+<input type="text" name="mailto:string" size="40" />
+<br>Fill in the email-address of your list (required).</td>
+</tr>
+
+<tr>
+<td align="left" valign="top" class="form-label">Moderator</td>
+<td align="left" valign="top" class="form-help">
+<input type="text" name="moderator:tokens" size="40" />
+<br>Fill in at least one email-address of a list-moderator (required).</td>
+</tr>
+
+<tr>
+<td align="left" valign="top" class="form-optional">SMTP-Host</td>
+<td align="left" valign="top" class="form-help">
+<input type="text" name="smtphost:string" size="40" />
+<br>Fill in the IP of your outgoing SMTP-Host
+<br>or leave blank if you already have a MailHost [optional].</td>
+</tr>
+
+<tr>
+<td align="left" valign="top" class="form-optional">MTA-Hosts</td>
+<td align="left" valign="top" class="form-help">
+<input type="text" name="mtahosts:tokens" size="40" />
+<br>Fill in the IP's (space seperated) of allowed MTA-hosts
+<br>or leave blank for no security checks [optional].</td>
+</tr>
+
+<tr>
+<td align="left" valign="top" class="form-optional">Moderated list</td>
+<td align="left" valign="top" class="form-help">
+<input type="checkbox" name="moderated:boolean" />
+<br>Check this, if you want a moderated list [optional].</td>
+</tr>
+
+<tr>
+<td align="left" valign="top" class="form-optional">Archive</td>
+<td align="left" valign="top" class="form-help">
+ <select name="archived:string">
+  <option>not archived</option>
+  <option>plain text</option>
+  <option>with attachments</option>
+ </select>
+<br>Check the kind of archive [optional].</td>
+</tr>
+
+<tr>
+<td align="left" valign="top">
+</td>
+<td align="left" valign="top" class="form-element">
+<input class="form-element" type="submit" name="submit" value=" Add " />
+</td>
+</tr>
+
+</table>
+</form>
+
+<dtml-var manage_page_footer>
